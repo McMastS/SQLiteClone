@@ -4,6 +4,12 @@
 #include <stdio.h>
 #include <string.h>
 
+enum StatementType_t {
+	STATEMENT_INSERT,
+	STATEMENT_SELECT
+};
+typedef enum StatementType_t StatementType;
+
 struct InputBuffer_t 
 {
 	char* buffer;         
@@ -11,6 +17,11 @@ struct InputBuffer_t
 	ssize_t input_length; // may return an error value, therefore a signed int must be used
 };
 typedef struct InputBuffer_t InputBuffer;
+
+struct Statement_t {
+	StatementType type;
+};
+typedef struct Statement_t Statement;
 
 InputBuffer* new_input_buffer() {
 	InputBuffer* input_buffer = malloc(sizeof(InputBuffer));
@@ -45,22 +56,31 @@ void handle_meta_command(InputBuffer* input_buffer)
 	if (strcmp(input_buffer->buffer, ".exit") == 0) {
 		printf("Exiting. Have a nice day!\n");
 		exit(EXIT_SUCCESS);
-	} else {
+	} else if (strcmp(input_buffer->buffer, ".help") == 0) {
+		printf("Enter .exit to leave.\n");
+		printf("Enter insert or select to not actually do anything useful.\n");
+    } else {
 		printf("Unrecognized meta command.\n");
 	}
 }
 
-void handle_SQL(InputBuffer* input_buffer) 
+void prepare_SQL(InputBuffer* input_buffer, StatementType* statement) 
 {
-	if (strcmp(input_buffer->buffer, "insert") == 0) {
+	if (strncmp(input_buffer->buffer, "insert", 6) == 0) {
+		statement->type = STATEMENT_INSERT;
 		printf("I'm pretending to insert!\n");
 		printf("Insertion successful!\n");
-	} else if (strcmp(input_buffer->buffer, "delete") == 0) {
-		printf("I'm pretending to delete!\n");
+	} else if (strcmp(input_buffer->buffer, "select") == 0) {
+		statement->type = STATEMENT_SELECT;
+		printf("I'm pretending to select!\n");
 		printf("Deletion successful!\n");
 	} else {
 		printf("Unrecognized command %s\n", input_buffer->buffer);
 	}
+}
+
+void execute_SQL() {
+
 }
 
 int main() 
@@ -76,7 +96,7 @@ int main()
 		if (input_buffer->buffer[0] == '.') {
 			handle_meta_command(input_buffer);
 		} else {
-			handle_SQL(input_buffer);
+			prepare_SQL(input_buffer);
 		}
 	}
 }
