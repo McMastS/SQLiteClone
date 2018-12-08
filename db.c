@@ -42,7 +42,7 @@ void read_input(InputBuffer* input_buffer)
 	ssize_t bytes_read = getline(&(input_buffer->buffer), &(input_buffer->buffer_length), stdin);
 
 	if (bytes_read <= 0) {
-		printf("ERROR reading input.\n");
+		printf("Error reading input.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -70,7 +70,7 @@ void prepare_SQL(InputBuffer* input_buffer, Statement* statement)
 		statement->type = STATEMENT_INSERT;
 		printf("I'm pretending to insert!\n");
 		printf("Insertion successful!\n");
-	} else if (strcmp(input_buffer->buffer, "select") == 0) {
+	} else if (strncmp(input_buffer->buffer, "select", 6) == 0) {
 		statement->type = STATEMENT_SELECT;
 		printf("I'm pretending to select!\n");
 		printf("Select successful!\n");
