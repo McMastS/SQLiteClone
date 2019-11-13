@@ -85,7 +85,7 @@ void execute_SQL() {
 
 int main() 
 {
-	printf("Spencer's Custom Database Version 0.2\n");
+	printf("Spencer's Custom Database Version 0.3\n");
 	printf("Enter .help for instructions\n");
 
 	InputBuffer* input_buffer = new_input_buffer();
